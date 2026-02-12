@@ -1,8 +1,12 @@
+const express = require("express");
+const router = express.Router();
+
+
 //arrays para guardarlos temporalmente
 const usuarios =[];
 
 //ruta de registro
-app.post("/register", (req, res) =>{
+router.post("/register", (req, res) =>{
     const {email, password} = req.body;
 
     //verificar que los datos existen 
@@ -22,7 +26,7 @@ app.post("/register", (req, res) =>{
 });
 
 //ruta de login 
-app.post("/login", (req,res) =>{
+router.post("/login", (req,res) =>{
     const {email, password} = req.body;
 
         //verificar que los datos existen 
@@ -39,3 +43,5 @@ app.post("/login", (req,res) =>{
 
     res.status(200).json({mensaje: "login exitoso"});
 });
+
+module.exports = router;
