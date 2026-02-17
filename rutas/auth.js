@@ -30,7 +30,7 @@ router.post("/register", async (req, res) =>{
 
 //login con (cookie o jwt)
 router.post("/login", async (req,res) =>{
-    const {email, password, authtype} = req.body;
+    const {email, password, authType} = req.body;
 
     //verificar que los datos existen 
     if (!email || !password)  return res.status(400).json({mensaje: "Faltan datos"})
@@ -45,7 +45,7 @@ router.post("/login", async (req,res) =>{
 
 
         //opcion cookie 
-        if (authtype  === "cookie"){
+        if (authType  === "cookie"){
             req.session.userId = user.id;
             req.session.role = user.rol;
 
@@ -53,7 +53,7 @@ router.post("/login", async (req,res) =>{
         }
 
         //opcion jwt
-        if (authtype === "jwt"){
+        if (authType === "jwt"){
             const token = jwt.sign({
                 id: user.id, role: user.rol},
                 JWT_SECRET,
