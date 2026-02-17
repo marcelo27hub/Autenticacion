@@ -30,7 +30,7 @@ router.post("/register", async (req, res) =>{
 
 //login con (cookie o jwt)
 router.post("/login", async (req,res) =>{
-    const {email, password} = req.body;
+    const {email, password, authtype} = req.body;
 
     //verificar que los datos existen 
     if (!email || !password)  return res.status(400).json({mensaje: "Faltan datos"})
@@ -72,7 +72,7 @@ router.post("/login", async (req,res) =>{
 
 //perfil con cookie
 router.get("/perfil", (req,res) =>{
-    if (!req.usuario.userId){
+    if (!req.session.userId){
         return res.status(401).json({mensaje: "No autenticado"});
     }
 
@@ -96,7 +96,7 @@ router.post("/logout", (req, res) =>{
 //middleware jwt
 function verificarjwt(req,res,next) {
     const authHeader = req.headers.auhorization;
-    if(!authheader){
+    if(!authHeader){
         return res.status(401).json({mensaje: "Token requerido"});
     }
     
@@ -115,7 +115,7 @@ function verificarjwt(req,res,next) {
 
 
 //pperfil con jwt 
-router.get("perfil-jwt", verificarjwt, (req, res) =>{
+router.get("/perfil-jwt", verificarjwt, (req, res) =>{
     res.json({
         mensaje: " perfil con jwt",
         user: req.user
