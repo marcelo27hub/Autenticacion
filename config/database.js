@@ -10,11 +10,11 @@ const db = new sqlite3.Database("./database.db", (error) => {
 });
 
 //crear la tabla de usuarios si no existe
-db.run(`CREATE TABLE IF NOT EXISTS usuarios(
+db.run(`CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE,
     password TEXT,
-    rol TEXT DEFAULT "usaurio")`
+    rol TEXT DEFAULT "usuario")`
     );
 
-module.export = db;
+module.exports = db;
