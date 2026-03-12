@@ -4,10 +4,21 @@ const User = require("../models/user");
 
 const JWT_SECRET = "clave_jwt_secreta";
 
+// Función simple para escapar HTML (XSS)
+function escapar(input) {
+    return input.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+}
+
 const authController = {
 
     register: async (req, res) => {
-        const { email, password } = req.body;
+        const email = escapar(req.body.email);
+        const password = req.body.password;
+
         if(!email || !password) return res.status(400).json({ mensaje: "Faltan datos" });
 
         const hash = await bcrypt.hash(password, 10);
@@ -20,7 +31,9 @@ const authController = {
     },
 
     login: async (req, res) => {
-        const { email, password, authType } = req.body;
+        const email = escapar(req.body.email);
+        const password = req.body.password;
+        const authType = req.body.authType;
         if(!email || !password) return res.status(400).json({ mensaje: "Faltan datos" });
 
         try {
@@ -64,6 +77,10 @@ const authController = {
 
     perfilJWT: (req,res) => {
         res.json({ mensaje: "Perfil con jwt", user: req.user });
+    },
+
+        adminDashboard: (req,res) => {
+        res.json({ mensaje: "Bienvenido al panel de administrador" });
     }
 
 };
