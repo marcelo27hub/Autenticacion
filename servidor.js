@@ -7,19 +7,27 @@ const rateLimit = require("express-rate-limit");
 const csurf = require("csurf");
 
 
-const authrutas = require("./rutas/auth")
+const authrutas = require("./routes/auth")
 
 const app = express();
 const PORT = 5000;
 
 // Limitar intentos de login (fuerza bruta)
 const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 min
+    windowMs: 60 * 1000, // 30 seg
     max: 5,
-    message: { mensaje: "Demasiados intentos de login. Intenta más tarde." },
-    standardHeaders: true,
-    legacyHeaders: false
+    handler: (req, res) => {
+        res.status(429).render("login", {
+            csrfToken: req.csrfToken(),
+            mensaje: "Demasiados intentos de login. Intenta más tarde.",
+            tipo: "error"
+        });
+    }
 });
+
+// motor de plantillas
+app.set("view engine", "ejs");
+app.set("views", "./views");
 
 //middleware
 app.use(cors({
@@ -28,6 +36,7 @@ app.use(cors({
 })); // para que mi backend solo pueda leeer solo este puerto y no de otros computadoras
 
 app.use(express.json()); // para que que express pueda leer lo que venga del body en json
+app.use(express.urlencoded({ extended: true }));
 
 //cookies y sesiones
 app.use(cookieparser());
@@ -39,7 +48,7 @@ app.use(session({
         httpOnly: true,
         secure: false,
         sameSite: "strict",
-        maxAge: 1000 * 60 * 60 //1 hora
+        maxAge: 1000 * 60 * 60 // 1 hora
     }
 }));
 
@@ -55,6 +64,16 @@ app.get("/", (req, res) =>{
     res.send("servidor corriendo");
 });
 
+app.use((err, req, res, next) => {
+    if(err.code === "EBADCSRFTOKEN") {
+    return res.status(403).json({ mensaje: "Token CSRF inválido" });
+    }
+    if(err.name === "UnauthorizedError") {
+    return res.status(401).json({ mensaje: "JWT inválido" });
+    }
+    console.error(err);
+    res.status(500).json({ mensaje: "Error interno del servidor" });
+});
 
 //iniciar servidor
 app.listen(PORT, () =>{
