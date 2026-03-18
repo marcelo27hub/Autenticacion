@@ -1,0 +1,30 @@
+/project-root
+│
+├─ /controllers
+│   └─ authcontrollers.js        # Controlador de login, register, logout, perfil, JWT y cookies
+│
+├─ /middlewares
+│   ├─ jwtMiddleware.js          # Verifica JWT y descifra payload
+│   ├─ verificarSesionOCookie.js # Middleware híbrido: sesión cookie o JWT
+│   └─ rolMiddleware.js          # Opcional, para rutas de admin
+│
+├─ /models
+│   └─ user.js                   # Modelo de usuarios, create, findByEmail, etc.
+│
+├─ /utils
+│   └─ crypto.js                 # Funciones cifrar() y descifrar() (solo JWT ahora)
+│
+├─ /views                        # vistas: registro, login, perfil          
+│   ├─ login.ejs
+│   ├─ register.ejs
+│   └─ perfil.ejs               
+│
+├─ /routes
+│   └─ auth.js                   # Rutas de auth: login, register, logout, perfil, admin
+│
+├─ app.js / server.js             # Configuración principal de Express, cookies, CSRF, sesiones
+│
+├─ package.json
+
+
+y un admin.js qeu se corre primero antes que el serivdor para entrar en la base de datos!
