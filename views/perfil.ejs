@@ -20,6 +20,11 @@
         <p class="font-medium">Rol: <span class="text-gray-700"><%= role %></span></p>
     </div>
     
+    <% if (role === "administrador") { %>
+        <a href="/auth/admin" class="block mt-4 bg-blue-500 text-white p-2 rounded text-center">
+        I   r al panel admin
+        </a>
+    <% } %>
 
     <form action="/auth/logout" method="POST">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
