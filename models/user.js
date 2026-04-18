@@ -20,6 +20,18 @@ const User = {
                 else resolve(row);
             });
         });
+    },
+    getAll: () => {
+        return new Promise((resolve, reject) => {
+            db.all(
+                "SELECT id, email, rol FROM users",
+                [],
+                (err, rows) => {
+                    if(err) reject(err);
+                    else resolve(rows);
+                }
+            );
+        });
     }
 };
 
