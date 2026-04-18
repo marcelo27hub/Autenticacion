@@ -20,6 +20,6 @@ module.exports = ( loginLimiter) => {
     router.get("/perfil-jwt", verificarJWT, authController.perfilJWT);
 
     // Dashboard de administrador
-    router.get("/admin-dashboard", verificarSesionOCookie, verificarRol("administrador"), authController.adminDashboard);
+    router.get("/admin", verificarSesionOCookie, verificarRol("administrador"), authController.verUsuarios);
     return router;
 };
