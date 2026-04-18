@@ -174,7 +174,22 @@ const authController = {
             csrfToken: req.csrfToken(),
             mensaje: "Perfil con JWT",
             tipo: "exito"
-    });
+        });
+    },
+    verUsuarios: async (req, res) => {
+        try {
+            const usuarios = await User.getAll();
+
+            res.render("admin", {
+                usuarios,
+                csrfToken: req.csrfToken(),
+                mensaje: "Panel de administrador",
+                tipo: "exito"
+            });
+
+        } catch (err) {
+            res.status(500).send("Error al obtener usuarios");
+        }
     },
 
     adminDashboard: (req,res) => {
